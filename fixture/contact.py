@@ -39,3 +39,13 @@ class ContactHelper:
         # submit
         wd.find_element_by_name("submit").click()
         wd.find_element_by_link_text("home page").click()
+
+
+
+    def del_first(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+#        delete first group
+#        wd.find_element_by_name("delete").click()
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to_alert().accept()
