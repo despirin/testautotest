@@ -2,6 +2,7 @@ from model.group import Group
 
 
 class GroupHelper:
+    group_cache = None
     def __init__(self, app):
         self.app = app
 
@@ -21,6 +22,7 @@ class GroupHelper:
         #submit
         wd.find_element_by_name("submit").click()
         self.return_to_group_page()
+        self.group_cache = None
 
 
     def fill_group_form(self, group):
@@ -43,24 +45,20 @@ class GroupHelper:
         wd.find_element_by_link_text("group page").click()
 
 
-    def del_first_group(self):
-        wd = self.app.wd
-        self.open_page()
-        self.select_first_group()
-        #delete first group
-        wd.find_element_by_name("delete").click()
-        self.return_to_group_page()
+
+
 
 
     def get_group_list(self):
-        wd = self.app.wd
-        self.open_page()
-        groups = []
-        for element in wd.find_elements_by_css_selector("span.group"):
-            text = element.text
-            element.find_element_by_name("selected[]").get_attribute("value")
-            groups.append(Group(name=text, id=id))
-        return groups
+        if self.group_cache is None:
+            wd = self.app.wd
+            self.open_page()
+            self.group_cache = []
+            for element in wd.find_elements_by_css_selector("span.group"):
+                text = element.text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                self.group_cache.append(Group(name=text, id=id))
+        return list (self.group_cache)
 
 
     def select_first_group(self):
@@ -80,9 +78,28 @@ class GroupHelper:
         wd.find_element_by_name("update").click()
         #return
         self.return_to_group_page()
+        self.group_cache = None
 
 
     def count (self):
         wd = self.app.wd
         self.open_page()
         return len (wd.find_elements_by_name("selected[]"))
+
+
+    def del_first_group(self):
+        self.del_group_by_index(0)
+
+
+    def del_group_by_index(self,index):
+        wd = self.app.wd
+        self.open_page()
+        self.select_group_by_index(index)
+        # delete first group
+        wd.find_element_by_name("delete").click()
+        self.return_to_group_page()
+        self.group_cache = None
+
+    def select_group_by_index(self,index):
+        wd = self.app.wd
+        wd.find_elements_by_name("selected[]")[index].click()
