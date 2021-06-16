@@ -44,6 +44,7 @@ class ContactHelper:
 
     def del_first(self):
         wd = self.app.wd
+        wd.find_element_by_link_text("home").click()
         wd.find_element_by_name("selected[]").click()
 #        delete first group
 #        wd.find_element_by_name("delete").click()
