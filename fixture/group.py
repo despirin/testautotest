@@ -45,10 +45,6 @@ class GroupHelper:
         wd.find_element_by_link_text("group page").click()
 
 
-
-
-
-
     def get_group_list(self):
         if self.group_cache is None:
             wd = self.app.wd
