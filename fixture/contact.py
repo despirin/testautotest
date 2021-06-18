@@ -82,13 +82,11 @@ class ContactHelper:
             self.contact_cache = []
             for row in wd.find_elements_by_name("entry"):
                 cells = row.find_elements_by_tag_name("td")
-                firstname = cells[1].text
-                lastname = cells[2].text
+                firstname = cells[2].text
+                lastname = cells[1].text
                 id = cells[0].find_element_by_tag_name("input").get_attribute("value")
-                all_phones = ["", "", "", "", ""]
                 all_phones = cells[5].text.splitlines()
-
-
+                if len(all_phones) == 0: all_phones = [None, None, None, None]
                 self.contact_cache.append(Contact(firstname=firstname, lastname=lastname, id=id,
                                                   homephone=all_phones[0], workphone=all_phones[1],
                        mobilephone=all_phones[2], secondaryphone=all_phones[3]))
@@ -113,3 +111,10 @@ class ContactHelper:
         secondaryphone = wd.find_element_by_name("phone2").get_attribute("vale")
         return Contact(firstname=firstname, lastname=lastname, id=id, homephone=homephone, workphone=workphone,
                        mobilephone=mobilephone, secondaryphone=secondaryphone)
+
+    def open_contact_view_by_index(self, index):
+        wd = self.app.wd
+        self.open_contact()
+        row = wd.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[6]
+        cell.find_element_by_tag_name("a").click()
