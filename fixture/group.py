@@ -22,7 +22,7 @@ class GroupHelper:
         #submit
         wd.find_element_by_name("submit").click()
         self.return_to_group_page()
-        self.group_cache = None
+        #self.group_cache = None
 
 
     def fill_group_form(self, group):
@@ -46,14 +46,14 @@ class GroupHelper:
 
 
     def get_group_list(self):
-        if self.group_cache is None:
-            wd = self.app.wd
-            self.open_page()
-            self.group_cache = []
-            for element in wd.find_elements_by_css_selector("span.group"):
-                text = element.text
-                id = element.find_element_by_name("selected[]").get_attribute("value")
-                self.group_cache.append(Group(name=text, id=id))
+        #if self.group_cache is None:
+        wd = self.app.wd
+        self.open_page()
+        self.group_cache = []
+        for element in wd.find_elements_by_css_selector("span.group"):
+            text = element.text
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            self.group_cache.append(Group(name=text, id=id))
         return list (self.group_cache)
 
 
@@ -87,7 +87,7 @@ class GroupHelper:
         self.del_group_by_index(0)
 
 
-    def del_group_by_index(self,index):
+    def del_group_by_index(self, index):
         wd = self.app.wd
         self.open_page()
         self.select_group_by_index(index)
@@ -96,6 +96,19 @@ class GroupHelper:
         self.return_to_group_page()
         self.group_cache = None
 
-    def select_group_by_index(self,index):
+    def select_group_by_index(self, index):
         wd = self.app.wd
         wd.find_elements_by_name("selected[]")[index].click()
+
+    def select_group_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[value='%s'" % id).click()
+
+    def del_group_by_id(self, id):
+        wd = self.app.wd
+        self.open_page()
+        self.select_group_by_id(id)
+        # delete first group
+        wd.find_element_by_name("delete").click()
+        self.return_to_group_page()
+        self.group_cache = None

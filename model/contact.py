@@ -14,7 +14,7 @@ class Contact:
         self.workphone = workphone
         self.mobilephone = mobilephone
         self.secondaryphone = secondaryphone
-        self.allphone=all_phone_from_homepage
+        self.allphone = all_phone_from_homepage
 
 
 '''
